@@ -1,0 +1,61 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.docstates
+*.pdb
+*.dll
+*.exe
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.production
+.env.example
+*.env
+
+# Visual Studio
+.vs/
+*.userprefs
+*.pidb
+*.booproj
+
+# Logs
+logs/
+*.log
+
+# Database
+*.db
+*.sqlite
+
+# OS
+.DS_Store
+Thumbs.db
+
+# JetBrains
+.idea/
+*.sln.iml
+
+# Temporary files
+*.tmp
+*.temp
+
+# NuGet
+packages/
+*.nupkg
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
