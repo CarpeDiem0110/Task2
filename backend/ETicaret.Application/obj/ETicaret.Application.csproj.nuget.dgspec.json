@@ -58,13 +58,17 @@
               "target": "Package",
               "version": "[15.0.1, )"
             },
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
             "FluentValidation": {
               "target": "Package",
               "version": "[12.0.0, )"
             },
             "MediatR": {
               "target": "Package",
-              "version": "[13.0.0, )"
+              "version": "[11.1.0, )"
             },
             "MediatR.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
