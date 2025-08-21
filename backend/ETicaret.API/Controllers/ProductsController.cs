@@ -43,7 +43,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [Authorize] // Admin kontrolünü geçici olarak kaldırdık
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand command)
     {
         try

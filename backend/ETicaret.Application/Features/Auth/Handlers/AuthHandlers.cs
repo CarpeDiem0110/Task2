@@ -1,4 +1,5 @@
 using ETicaret.Application.DTOs.Auth;
+using ETicaret.Domain.Enums;
 using ETicaret.Application.Features.Auth.Commands;
 using ETicaret.Application.Interfaces;
 using ETicaret.Domain.Entities;
@@ -35,7 +36,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, AuthRespo
             LastName = request.LastName,
             Email = request.Email,
             PasswordHash = passwordHash,
-            Role = UserRole.Customer
+            Role = request.Role
         };
 
         var savedUser = await _userRepository.AddAsync(user);
