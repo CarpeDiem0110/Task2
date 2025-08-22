@@ -20,7 +20,7 @@ export interface RegisterRequest {
   lastName: string
   email: string
   password: string
-  role: string
+  role: 0 | 1 // 0 = Customer, 1 = Admin
 }
 
 export interface LoginRequest {

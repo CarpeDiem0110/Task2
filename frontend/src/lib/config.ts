@@ -1,5 +1,5 @@
 // API Base URL Configuration
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5074/api'
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL 
 
 // Application configuration
 export const APP_CONFIG = {
