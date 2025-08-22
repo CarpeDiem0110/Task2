@@ -3,6 +3,7 @@ using ETicaret.Application.Features.Products.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace ETicaret.API.Controllers;
 
@@ -43,11 +44,52 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize] // Admin kontrolünü geçici olarak kaldırdık
-    public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand command)
+    [Authorize] // Geçici olarak sadece authenticate olmuş kullanıcılar
+    public async Task<IActionResult> CreateProduct([FromForm] CreateProductCommand command, IFormFile? imageFile)
     {
         try
         {
+            // Resim yükleme işlemi
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                // Dosya uzantısı kontrolü
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+                var fileExtension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
+                
+                if (!allowedExtensions.Contains(fileExtension))
+                {
+                    return BadRequest(new { message = "Sadece JPG, JPEG, PNG, WebP ve GIF dosyaları yükleyebilirsiniz." });
+                }
+
+                // Dosya boyutu kontrolü (5MB limit)
+                if (imageFile.Length > 5 * 1024 * 1024)
+                {
+                    return BadRequest(new { message = "Dosya boyutu 5MB'dan küçük olmalıdır." });
+                }
+
+                // Benzersiz dosya adı oluştur
+                var fileName = $"{Guid.NewGuid()}{fileExtension}";
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+                
+                // Klasör yoksa oluştur
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                // Dosyayı kaydet
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(fileStream);
+                }
+
+                // URL'i command'a set et
+                var baseUrl = Environment.GetEnvironmentVariable("API_BASE_URL") ;
+                command.ImageUrl = $"{baseUrl}/images/{fileName}";
+            }
+
             var result = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetProductById), new { id = result.Id }, result);
         }
@@ -58,12 +100,69 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductCommand command)
+    [Authorize] // Geçici olarak sadece authenticate olmuş kullanıcılar
+    public async Task<IActionResult> UpdateProduct(Guid id, [FromForm] UpdateProductCommand command, IFormFile? imageFile)
     {
         try
         {
             command.Id = id;
+
+            // Resim yükleme işlemi (eğer yeni resim gönderildiyse)
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                // Dosya uzantısı kontrolü
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+                var fileExtension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
+                
+                if (!allowedExtensions.Contains(fileExtension))
+                {
+                    return BadRequest(new { message = "Sadece JPG, JPEG, PNG, WebP ve GIF dosyaları yükleyebilirsiniz." });
+                }
+
+                // Dosya boyutu kontrolü (5MB limit)
+                if (imageFile.Length > 5 * 1024 * 1024)
+                {
+                    return BadRequest(new { message = "Dosya boyutu 5MB'dan küçük olmalıdır." });
+                }
+
+                // Benzersiz dosya adı oluştur
+                var fileName = $"{Guid.NewGuid()}{fileExtension}";
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+                
+                // Klasör yoksa oluştur
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                // Dosyayı kaydet
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(fileStream);
+                }
+
+                // Eski resmi sil (eğer varsa)
+                if (!string.IsNullOrEmpty(command.ImageUrl) && command.ImageUrl.Contains("/images/"))
+                {
+                    var urlParts = command.ImageUrl.Split("/images/");
+                    if (urlParts.Length > 1)
+                    {
+                        var oldFileName = urlParts[1];
+                        var oldFilePath = Path.Combine(uploadsFolder, oldFileName);
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+                        }
+                    }
+                }
+
+                // URL'i command'a set et
+                var baseUrl = Environment.GetEnvironmentVariable("API_BASE_URL") ?? "http://localhost:5074";
+                command.ImageUrl = $"{baseUrl}/images/{fileName}";
+            }
+
             var result = await _mediator.Send(command);
             return Ok(result);
         }

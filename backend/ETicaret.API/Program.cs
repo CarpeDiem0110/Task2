@@ -110,7 +110,7 @@ var jwtSettings = new
     SecretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY")!,
     Issuer = Environment.GetEnvironmentVariable("JWT_ISSUER")!,
     Audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE")!,
-    ExpireMinutes = int.Parse(Environment.GetEnvironmentVariable("JWT_EXPIRE_MINUTES") ?? "30")
+    ExpireMinutes = int.Parse(Environment.GetEnvironmentVariable("JWT_EXPIRE_MINUTES") ?? "480") // 8 saat
 };
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -169,6 +169,10 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.UseHttpsRedirection();
+
+// Static files middleware for serving uploaded images
+app.UseStaticFiles();
+
 app.UseCors("AllowAll");
 
 app.UseAuthentication();
