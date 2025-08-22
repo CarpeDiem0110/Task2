@@ -19,7 +19,7 @@ export default function RootLayout({
   children
 }: Props) {
   return (
-    <html>
+    <html lang="tr">
       <body className={inter.className}>
         <ReduxProvider>
           {children}

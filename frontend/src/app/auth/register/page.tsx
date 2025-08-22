@@ -42,7 +42,7 @@ export default function RegisterPage() {
         lastName: formData.lastName,
         email: formData.email,
         password: formData.password,
-        role: 0 as const // 0 = Customer
+        role: 0 as const // Her zaman Customer (0)
       }
       
       console.log('Sending register data:', registerData)

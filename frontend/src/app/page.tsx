@@ -2,12 +2,14 @@
 
 import { useEffect } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/store'
 import { fetchProducts } from '@/store/slices/productsSlice'
 import { addToCart } from '@/store/slices/cartSlice'
 
 export default function HomePage() {
   const dispatch = useAppDispatch()
+  const router = useRouter()
   const { items: products, isLoading } = useAppSelector((state) => state.products)
   const { isAuthenticated, user } = useAppSelector((state) => state.auth)
   const { itemCount, items: cartItems } = useAppSelector((state) => state.cart)
@@ -15,6 +17,13 @@ export default function HomePage() {
   useEffect(() => {
     dispatch(fetchProducts())
   }, [dispatch])
+
+  // Admin kontrolü - eğer admin giriş yapmışsa admin dashborda yönlendir
+  useEffect(() => {
+    if (isAuthenticated && user?.role === 'Admin') {
+      router.push('/admin')
+    }
+  }, [isAuthenticated, user, router])
 
   const handleAddToCart = (productId: string) => {
     if (!isAuthenticated) {
@@ -106,7 +115,7 @@ export default function HomePage() {
                   {user?.role === 'Admin' && (
                     <Link
                       href="/admin"
-                      className="bg-purple-500 hover:bg-purple-600 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+                      className="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition-colors"
                     >
                       Admin Panel
                     </Link>

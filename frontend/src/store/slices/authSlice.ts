@@ -23,16 +23,32 @@ const initialState: AuthState = {
 export const loginUser = createAsyncThunk(
   'auth/login',
   async (credentials: LoginRequest, { rejectWithValue }) => {
+    console.log('🚀 LOGINUSER THUNK BAŞLADI!')
+    console.log('📝 Credentials:', credentials)
+    console.log('🌐 API_BASE_URL:', process.env.NEXT_PUBLIC_API_URL)
+    console.log('🎯 Login endpoint:', API_ENDPOINTS.auth.login)
+    
     try {
+      console.log('📡 API call yapılıyor...')
       const response = await apiClient.post<AuthResponse>(API_ENDPOINTS.auth.login, credentials)
+      console.log('✅ API Response:', response)
+      console.log('📊 Response data:', response.data)
+      
       const { token, user } = response.data
       
       // Store in localStorage
       localStorage.setItem('token', token)
       localStorage.setItem('user', JSON.stringify(user))
       
+      console.log('💾 LocalStorage kaydedildi')
       return { token, user }
     } catch (error: any) {
+      console.error('❌ LOGIN HATA:', error)
+      console.error('🔍 Hata detayları:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      })
       return rejectWithValue(error.response?.data?.message || 'Login failed')
     }
   }
