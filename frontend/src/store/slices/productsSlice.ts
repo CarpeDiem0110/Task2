@@ -58,6 +58,41 @@ export const fetchProducts = createAsyncThunk(
   }
 )
 
+// Filtreleme parametreleri
+export interface FilterParams {
+  category?: string
+  minPrice?: number
+  maxPrice?: number
+  sortBy?: 'name' | 'price' | 'date'
+  sortDescending?: boolean
+}
+
+// Backend API'sine uygun filtrelenmiş ürünler
+export const fetchFilteredProducts = createAsyncThunk(
+  'products/fetchFilteredProducts',
+  async (filters: FilterParams, { rejectWithValue }) => {
+    try {
+      const params = new URLSearchParams()
+      
+      // Backend PascalCase parameter isimleri kullanıyor
+      if (filters.category) params.append('Category', filters.category)
+      if (filters.minPrice !== undefined) params.append('MinPrice', filters.minPrice.toString())
+      if (filters.maxPrice !== undefined) params.append('MaxPrice', filters.maxPrice.toString())
+      if (filters.sortBy) params.append('SortBy', filters.sortBy)
+      if (filters.sortDescending !== undefined) params.append('SortDescending', filters.sortDescending.toString())
+      
+      const url = params.toString() ? `/products?${params.toString()}` : '/products'
+      console.log('🔍 Backend filtreleme API çağrısı:', url)
+      const response = await apiClient.get<Product[]>(url)
+      console.log('✅ Filtrelenmiş ürünler geldi:', response.data.length, 'adet')
+      return response.data
+    } catch (error: any) {
+      console.error('❌ Filtreleme hatası:', error)
+      return rejectWithValue(error.response?.data?.message || 'Filtrelenmiş ürünler yüklenemedi')
+    }
+  }
+)
+
 export const fetchProductById = createAsyncThunk(
   'products/fetchProductById',
   async (id: string, { rejectWithValue }) => {
@@ -69,6 +104,14 @@ export const fetchProductById = createAsyncThunk(
     }
   }
 )
+
+export interface FilterParams {
+  category?: string
+  minPrice?: number
+  maxPrice?: number
+  sortBy?: 'name' | 'price' | 'date'
+  sortDescending?: boolean
+}
 
 const productsSlice = createSlice({
   name: 'products',
@@ -174,6 +217,21 @@ const productsSlice = createSlice({
         state.pagination.total = action.payload.length
       })
       .addCase(fetchProducts.rejected, (state, action) => {
+        state.isLoading = false
+        state.error = action.payload as string
+      })
+      // Fetch filtered products cases
+      .addCase(fetchFilteredProducts.pending, (state) => {
+        state.isLoading = true
+        state.error = null
+      })
+      .addCase(fetchFilteredProducts.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.items = action.payload
+        state.filteredItems = action.payload
+        state.pagination.total = action.payload.length
+      })
+      .addCase(fetchFilteredProducts.rejected, (state, action) => {
         state.isLoading = false
         state.error = action.payload as string
       })

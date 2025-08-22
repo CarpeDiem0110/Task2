@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/store'
 import { fetchProducts } from '@/store/slices/productsSlice'
 import { addToCart } from '@/store/slices/cartSlice'
+import { initializeAuth } from '@/store/slices/authSlice'
+import ProductFilters from '@/components/ProductFilters_backend'
 
 export default function HomePage() {
   const dispatch = useAppDispatch()
@@ -187,6 +189,9 @@ export default function HomePage() {
             En popüler ve kaliteli ürünlerimizi keşfedin
           </p>
         </div>
+
+        {/* Filtreleme Bileşeni */}
+        <ProductFilters />
 
         {products.length === 0 ? (
           <div className="text-center py-12">

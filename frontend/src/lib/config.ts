@@ -17,7 +17,7 @@ export const API_ENDPOINTS = {
     profile: '/auth/profile',
   },
   products: {
-    all: '/products/all',
+    all: '/products',
     byId: '/products',
     create: '/products',
     update: '/products',
