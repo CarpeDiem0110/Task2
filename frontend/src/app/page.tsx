@@ -17,6 +17,8 @@ export default function HomePage() {
   const { itemCount, items: cartItems } = useAppSelector((state) => state.cart)
 
   useEffect(() => {
+    // Auth durumunu localStorage'dan yükle
+    dispatch(initializeAuth())
     dispatch(fetchProducts())
   }, [dispatch])
 
@@ -102,9 +104,7 @@ export default function HomePage() {
                 <Link href="/" className="text-gray-700 hover:text-blue-600 transition-colors">
                   Ana Sayfa
                 </Link>
-                <Link href="/products" className="text-gray-700 hover:text-blue-600 transition-colors">
-                  Tüm Ürünler
-                </Link>
+
               </nav>
             </div>
             
@@ -269,16 +269,17 @@ export default function HomePage() {
           </div>
         )}
 
-        {products.length > 8 && (
+        {/* Tüm ürünler zaten ana sayfada gösteriliyor, bu buton gereksiz */}
+        {/* {products.length > 8 && (
           <div className="text-center mt-12">
             <Link
-              href="/products"
+              href="/"
               className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors"
             >
               Tüm Ürünleri Görüntüle
             </Link>
           </div>
-        )}
+        )} */}
       </section>
 
       {/* Footer */}
@@ -292,9 +293,6 @@ export default function HomePage() {
             <div className="flex justify-center space-x-6">
               <Link href="/" className="text-gray-400 hover:text-white transition-colors">
                 Ana Sayfa
-              </Link>
-              <Link href="/products" className="text-gray-400 hover:text-white transition-colors">
-                Ürünler
               </Link>
               <Link href="/auth/login" className="text-gray-400 hover:text-white transition-colors">
                 Giriş

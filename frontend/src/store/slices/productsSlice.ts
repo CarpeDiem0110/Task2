@@ -79,7 +79,8 @@ export const fetchFilteredProducts = createAsyncThunk(
       if (filters.minPrice !== undefined) params.append('MinPrice', filters.minPrice.toString())
       if (filters.maxPrice !== undefined) params.append('MaxPrice', filters.maxPrice.toString())
       if (filters.sortBy) params.append('SortBy', filters.sortBy)
-      if (filters.sortDescending !== undefined) params.append('SortDescending', filters.sortDescending.toString())
+      // SortDescending parametresini her zaman ekle
+      params.append('SortDescending', filters.sortDescending ? 'true' : 'false')
       
       const url = params.toString() ? `/products?${params.toString()}` : '/products'
       console.log('🔍 Backend filtreleme API çağrısı:', url)

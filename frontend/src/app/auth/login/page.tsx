@@ -23,7 +23,7 @@ export default function LoginPage() {
       console.log('Sending login data:', credentials)
       const result = await dispatch(loginUser(credentials)).unwrap()
       console.log('Login successful:', result)
-      router.push('/products')
+      router.push('/')
     } catch (error: any) {
       console.error('Login failed:', error)
     }

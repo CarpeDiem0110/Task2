@@ -33,7 +33,7 @@ export default function ProductFilters() {
   const [localMinPrice, setLocalMinPrice] = useState<string>('')
   const [localMaxPrice, setLocalMaxPrice] = useState<string>('')
   const [localCategory, setLocalCategory] = useState<string>('')
-  const [localSortBy, setLocalSortBy] = useState<'name' | 'price' | 'date'>('name')
+  const [localSortBy, setLocalSortBy] = useState<'price' | 'date'>('price')
   const [localSortDesc, setLocalSortDesc] = useState<boolean>(false)
 
   // URL'i güncelle
@@ -41,9 +41,9 @@ export default function ProductFilters() {
     const params = new URLSearchParams()
     
     if (filterParams.category) params.set('category', filterParams.category)
-    if (filterParams.minPrice) params.set('minPrice', filterParams.minPrice.toString())
-    if (filterParams.maxPrice) params.set('maxPrice', filterParams.maxPrice.toString())
-    if (filterParams.sortBy && filterParams.sortBy !== 'name') params.set('sortBy', filterParams.sortBy)
+    if (filterParams.minPrice !== undefined) params.set('minPrice', filterParams.minPrice.toString())
+    if (filterParams.maxPrice !== undefined) params.set('maxPrice', filterParams.maxPrice.toString())
+    if (filterParams.sortBy) params.set('sortBy', filterParams.sortBy)
     if (filterParams.sortDescending) params.set('sortDesc', 'true')
 
     const queryString = params.toString()
@@ -59,10 +59,17 @@ export default function ProductFilters() {
     if (localCategory) filterParams.category = localCategory
     if (localMinPrice) filterParams.minPrice = parseInt(localMinPrice)
     if (localMaxPrice) filterParams.maxPrice = parseInt(localMaxPrice)
-    if (localSortBy !== 'name' || localSortDesc) {
-      filterParams.sortBy = localSortBy
-      filterParams.sortDescending = localSortDesc
-    }
+    
+    // Sıralama her zaman ekle
+    filterParams.sortBy = localSortBy
+    filterParams.sortDescending = localSortDesc
+    
+    console.log('🔍 Filter Params:', {
+      sortBy: filterParams.sortBy,
+      sortDescending: filterParams.sortDescending,
+      localSortBy,
+      localSortDesc
+    })
 
     // Redux state'i güncelle
     dispatch(setCategory(localCategory))
@@ -96,7 +103,7 @@ export default function ProductFilters() {
     setLocalCategory('')
     setLocalMinPrice('')
     setLocalMaxPrice('')
-    setLocalSortBy('name')
+    setLocalSortBy('price')
     setLocalSortDesc(false)
     
     dispatch(clearFilters())
@@ -158,14 +165,12 @@ export default function ProductFilters() {
           <select
             value={`${localSortBy}-${localSortDesc ? 'desc' : 'asc'}`}
             onChange={(e) => {
-              const [sortBy, order] = e.target.value.split('-') as ['name' | 'price' | 'date', 'asc' | 'desc']
+              const [sortBy, order] = e.target.value.split('-') as ['price' | 'date', 'asc' | 'desc']
               setLocalSortBy(sortBy)
               setLocalSortDesc(order === 'desc')
             }}
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
           >
-            <option value="name-asc">İsim (A-Z)</option>
-            <option value="name-desc">İsim (Z-A)</option>
             <option value="price-asc">Fiyat (Düşük-Yüksek)</option>
             <option value="price-desc">Fiyat (Yüksek-Düşük)</option>
             <option value="date-desc">Tarih (Yeni)</option>
@@ -191,7 +196,7 @@ export default function ProductFilters() {
       </div>
 
       {/* Aktif Filtreler */}
-      {(localCategory || localMinPrice || localMaxPrice || localSortBy !== 'name' || localSortDesc) && (
+      {(localCategory || localMinPrice || localMaxPrice || localSortDesc) && (
         <div className="mt-4 flex flex-wrap gap-2">
           {localCategory && (
             <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -203,7 +208,7 @@ export default function ProductFilters() {
               Fiyat: {localMinPrice || '∞'} - {localMaxPrice || '∞'} TL
             </span>
           )}
-          {(localSortBy !== 'name' || localSortDesc) && (
+          {localSortDesc && (
             <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
               Sıralama: {localSortBy} {localSortDesc ? '↓' : '↑'}
             </span>

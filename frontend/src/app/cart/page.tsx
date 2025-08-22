@@ -4,11 +4,17 @@ import { useEffect } from 'react'
 import Link from 'next/link'
 import { useAppDispatch, useAppSelector } from '@/store'
 import { removeFromCart, updateQuantity, clearCart } from '@/store/slices/cartSlice'
+import { initializeAuth } from '@/store/slices/authSlice'
 
 export default function CartPage() {
   const dispatch = useAppDispatch()
   const { items: cartItems, total, itemCount } = useAppSelector((state) => state.cart)
   const { isAuthenticated, user } = useAppSelector((state) => state.auth)
+
+  // Auth durumunu localStorage'dan yükle
+  useEffect(() => {
+    dispatch(initializeAuth())
+  }, [dispatch])
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -55,7 +61,7 @@ export default function CartPage() {
             
             <div className="flex items-center space-x-4">
               <Link
-                href="/products"
+                href="/"
                 className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition-colors"
               >
                 Alışverişe Devam Et
@@ -87,7 +93,7 @@ export default function CartPage() {
                 Henüz sepetinizde ürün bulunmuyor. Alışverişe başlamak için ürünler sayfasını ziyaret edin.
               </p>
               <Link
-                href="/products"
+                href="/"
                 className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
               >
                 Alışverişe Başla

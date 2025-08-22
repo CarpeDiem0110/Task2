@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAppDispatch, useAppSelector } from '@/store'
 import { addToCart } from '@/store/slices/cartSlice'
+import { initializeAuth } from '@/store/slices/authSlice'
 import { Product } from '@/types'
 import { apiClient } from '@/lib/api-client'
 
@@ -20,6 +21,11 @@ export default function ProductDetailPage() {
   
   const { isAuthenticated, user } = useAppSelector((state) => state.auth)
   const { itemCount } = useAppSelector((state) => state.cart)
+
+  // Auth durumunu localStorage'dan yükle
+  useEffect(() => {
+    dispatch(initializeAuth())
+  }, [dispatch])
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -115,9 +121,7 @@ export default function ProductDetailPage() {
                 <Link href="/" className="text-gray-700 hover:text-blue-600 transition-colors">
                   Ana Sayfa
                 </Link>
-                <Link href="/products" className="text-gray-700 hover:text-blue-600 transition-colors">
-                  Tüm Ürünler
-                </Link>
+                <span className="text-gray-900">Ürün Detayı</span>
               </nav>
             </div>
             
@@ -179,8 +183,6 @@ export default function ProductDetailPage() {
         <div className="container mx-auto px-4 py-3">
           <nav className="flex space-x-2 text-sm text-gray-600">
             <Link href="/" className="hover:text-blue-600">Ana Sayfa</Link>
-            <span>/</span>
-            <Link href="/products" className="hover:text-blue-600">Ürünler</Link>
             <span>/</span>
             <span className="text-gray-900">{product.name}</span>
           </nav>

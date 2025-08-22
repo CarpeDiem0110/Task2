@@ -48,7 +48,7 @@ export default function RegisterPage() {
       console.log('Sending register data:', registerData)
       const result = await dispatch(registerUser(registerData)).unwrap()
       console.log('Register successful:', result)
-      router.push('/products')
+      router.push('/')
     } catch (error: any) {
       console.error('Registration failed:', error)
       setValidationError(error?.message || 'Kayıt sırasında bir hata oluştu')
