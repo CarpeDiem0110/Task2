@@ -196,7 +196,7 @@ export default function HomePage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {products.slice(0, 8).map((product) => (
+            {products.map((product) => (
               <div key={product.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow group">
                 <Link href={`/products/${product.id}`} className="block">
                   <div className="aspect-w-1 aspect-h-1 relative overflow-hidden">
