@@ -64,10 +64,11 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-[#111111] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-[#D4AF37] mb-2">ShopMax</h1>
+          <h2 className="text-2xl font-bold text-white">
             Yeni hesap oluşturun
           </h2>
         </div>
@@ -81,60 +82,75 @@ export default function RegisterPage() {
           
           <div className="space-y-4">
             <div>
+              <label htmlFor="firstName" className="block text-sm font-medium text-white mb-2">
+                Ad
+              </label>
               <input
                 id="firstName"
                 name="firstName"
                 type="text"
                 required
-                className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full px-4 py-3 border border-gray-600 rounded-lg text-white placeholder-gray-400 bg-gray-800 focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
                 placeholder="Adınız"
                 value={formData.firstName}
                 onChange={handleInputChange}
               />
             </div>
             <div>
+              <label htmlFor="lastName" className="block text-sm font-medium text-white mb-2">
+                Soyad
+              </label>
               <input
                 id="lastName"
                 name="lastName"
                 type="text"
                 required
-                className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full px-4 py-3 border border-gray-600 rounded-lg text-white placeholder-gray-400 bg-gray-800 focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
                 placeholder="Soyadınız"
                 value={formData.lastName}
                 onChange={handleInputChange}
               />
             </div>
             <div>
+              <label htmlFor="email" className="block text-sm font-medium text-white mb-2">
+                E-posta Adresi
+              </label>
               <input
                 id="email"
                 name="email"
                 type="email"
                 required
-                className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full px-4 py-3 border border-gray-600 rounded-lg text-white placeholder-gray-400 bg-gray-800 focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
                 placeholder="E-posta adresiniz"
                 value={formData.email}
                 onChange={handleInputChange}
               />
             </div>
             <div>
+              <label htmlFor="password" className="block text-sm font-medium text-white mb-2">
+                Şifre
+              </label>
               <input
                 id="password"
                 name="password"
                 type="password"
                 required
-                className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full px-4 py-3 border border-gray-600 rounded-lg text-white placeholder-gray-400 bg-gray-800 focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
                 placeholder="Şifreniz (en az 6 karakter)"
                 value={formData.password}
                 onChange={handleInputChange}
               />
             </div>
             <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-white mb-2">
+                Şifre Tekrarı
+              </label>
               <input
                 id="confirmPassword"
                 name="confirmPassword"
                 type="password"
                 required
-                className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full px-4 py-3 border border-gray-600 rounded-lg text-white placeholder-gray-400 bg-gray-800 focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
                 placeholder="Şifrenizi tekrar girin"
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
@@ -146,27 +162,24 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
+              className="w-full flex justify-center py-3 px-4 border border-transparent text-lg font-bold rounded-lg text-[#111111] bg-[#D4AF37] hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#D4AF37] disabled:opacity-50 transition-colors"
             >
               {isLoading ? 'Kayıt oluşturuluyor...' : 'Kayıt Ol'}
             </button>
           </div>
 
-          <div className="text-center">
+          <div className="text-center space-y-3">
             <Link 
               href="/auth/login"
-              className="text-blue-600 hover:text-blue-500"
+              className="block text-[#D4AF37] hover:text-yellow-600 font-medium transition-colors"
             >
               Zaten hesabınız var mı? Giriş yapın
             </Link>
-          </div>
-
-          <div className="text-center">
             <Link 
               href="/"
-              className="text-gray-600 hover:text-gray-500"
+              className="block text-gray-300 hover:text-white font-medium transition-colors"
             >
-              Ana sayfaya dön
+              ← Ana sayfaya dön
             </Link>
           </div>
         </form>

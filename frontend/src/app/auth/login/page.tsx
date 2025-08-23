@@ -38,10 +38,11 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-[#111111] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-[#D4AF37] mb-2">ShopMax</h1>
+          <h2 className="text-2xl font-bold text-white">
             Hesabınıza giriş yapın
           </h2>
         </div>
@@ -53,26 +54,32 @@ export default function LoginPage() {
             </div>
           )}
           
-          <div className="rounded-md shadow-sm -space-y-px">
+          <div className="space-y-4">
             <div>
+              <label htmlFor="email" className="block text-sm font-medium text-white mb-2">
+                E-posta Adresi
+              </label>
               <input
                 id="email"
                 name="email"
                 type="email"
                 required
-                className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10"
+                className="block w-full px-4 py-3 border border-gray-600 rounded-lg text-white placeholder-gray-400 bg-gray-800 focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
                 placeholder="E-posta adresiniz"
                 value={credentials.email}
                 onChange={handleInputChange}
               />
             </div>
             <div>
+              <label htmlFor="password" className="block text-sm font-medium text-white mb-2">
+                Şifre
+              </label>
               <input
                 id="password"
                 name="password"
                 type="password"
                 required
-                className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10"
+                className="block w-full px-4 py-3 border border-gray-600 rounded-lg text-white placeholder-gray-400 bg-gray-800 focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
                 placeholder="Şifreniz"
                 value={credentials.password}
                 onChange={handleInputChange}
@@ -84,27 +91,24 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+              className="w-full flex justify-center py-3 px-4 border border-transparent text-lg font-bold rounded-lg text-[#111111] bg-[#D4AF37] hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#D4AF37] disabled:opacity-50 transition-colors"
             >
               {isLoading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
             </button>
           </div>
 
-          <div className="text-center">
+          <div className="text-center space-y-3">
             <Link 
               href="/auth/register"
-              className="text-blue-600 hover:text-blue-500"
+              className="block text-[#D4AF37] hover:text-yellow-600 font-medium transition-colors"
             >
               Hesabınız yok mu? Kayıt olun
             </Link>
-          </div>
-
-          <div className="text-center">
             <Link 
               href="/"
-              className="text-gray-600 hover:text-gray-500"
+              className="block text-gray-300 hover:text-white font-medium transition-colors"
             >
-              Ana sayfaya dön
+              ← Ana sayfaya dön
             </Link>
           </div>
         </form>

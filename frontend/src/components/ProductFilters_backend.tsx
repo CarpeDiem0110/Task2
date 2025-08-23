@@ -54,11 +54,32 @@ export default function ProductFilters() {
 
   // Filtreleri uygula
   const applyFilters = () => {
+    // Fiyat validasyonu
+    const minPrice = localMinPrice ? parseInt(localMinPrice) : null
+    const maxPrice = localMaxPrice ? parseInt(localMaxPrice) : null
+    
+    // Negatif fiyat kontrolü
+    if (minPrice && minPrice < 0) {
+      alert('Minimum fiyat negatif olamaz!')
+      return
+    }
+    
+    if (maxPrice && maxPrice < 0) {
+      alert('Maksimum fiyat negatif olamaz!')
+      return
+    }
+    
+    // Min > Max kontrolü
+    if (minPrice && maxPrice && minPrice > maxPrice) {
+      alert('Minimum fiyat, maksimum fiyattan büyük olamaz!')
+      return
+    }
+    
     const filterParams: FilterParams = {}
     
     if (localCategory) filterParams.category = localCategory
-    if (localMinPrice) filterParams.minPrice = parseInt(localMinPrice)
-    if (localMaxPrice) filterParams.maxPrice = parseInt(localMaxPrice)
+    if (minPrice) filterParams.minPrice = minPrice
+    if (maxPrice) filterParams.maxPrice = maxPrice
     
     // Sıralama her zaman ekle
     filterParams.sortBy = localSortBy
@@ -112,18 +133,18 @@ export default function ProductFilters() {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="bg-white p-6 mb-6 border-t border-gray-200">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         
         {/* Kategori */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-[#111111] mb-2">
             Kategori
           </label>
           <select
             value={localCategory}
             onChange={(e) => setLocalCategory(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-2 border border-gray-300 rounded-md focus:ring-[#D4AF37] focus:border-[#D4AF37] text-[#111111]"
           >
             <option value="">Tüm Kategoriler</option>
             {CATEGORIES.map((category) => (
@@ -136,30 +157,34 @@ export default function ProductFilters() {
 
         {/* Fiyat Aralığı */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-[#111111] mb-2">
             Fiyat Aralığı (TL)
           </label>
           <div className="flex space-x-2">
             <input
               type="number"
+              min="0"
+              step="1"
               placeholder="Min"
               value={localMinPrice}
               onChange={(e) => setLocalMinPrice(e.target.value)}
-              className="w-1/2 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              className="w-1/2 p-2 border border-gray-300 rounded-md focus:ring-[#D4AF37] focus:border-[#D4AF37] text-[#111111]"
             />
             <input
               type="number"
+              min="0"
+              step="1"
               placeholder="Max"
               value={localMaxPrice}
               onChange={(e) => setLocalMaxPrice(e.target.value)}
-              className="w-1/2 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              className="w-1/2 p-2 border border-gray-300 rounded-md focus:ring-[#D4AF37] focus:border-[#D4AF37] text-[#111111]"
             />
           </div>
         </div>
 
         {/* Sıralama */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-[#111111] mb-2">
             Sıralama
           </label>
           <select
@@ -169,7 +194,7 @@ export default function ProductFilters() {
               setLocalSortBy(sortBy)
               setLocalSortDesc(order === 'desc')
             }}
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-2 border border-gray-300 rounded-md focus:ring-[#D4AF37] focus:border-[#D4AF37] text-[#111111]"
           >
             <option value="price-asc">Fiyat (Düşük-Yüksek)</option>
             <option value="price-desc">Fiyat (Yüksek-Düşük)</option>
@@ -177,39 +202,40 @@ export default function ProductFilters() {
             <option value="date-asc">Tarih (Eski)</option>
           </select>
         </div>
-
-        {/* Butonlar */}
-        <div className="flex flex-col space-y-2">
-          <button
-            onClick={applyFilters}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition-colors"
-          >
-            🔍 Filtrele
-          </button>
-          <button
-            onClick={clearAllFilters}
-            className="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md transition-colors"
-          >
-            🗑️ Temizle
-          </button>
-        </div>
       </div>
+
+      {/* Butonlar - Alt kısımda ortalanmış */}
+      <div className="flex justify-center space-x-4 mt-6">
+        <button
+          onClick={applyFilters}
+          className="bg-[#D4AF37]  text-black font-medium py-2 px-7 rounded-xl transition-colors"
+        >
+          🔍 Filtrele
+        </button>
+        <button
+          onClick={clearAllFilters}
+          className="bg-gray-500 hover:bg-gray-600 text-white font-medium py-3 px-7 rounded-xl transition-shadow"
+        >
+          🗑️ Temizle
+        </button>
+      </div>
+      
 
       {/* Aktif Filtreler */}
       {(localCategory || localMinPrice || localMaxPrice || localSortDesc) && (
         <div className="mt-4 flex flex-wrap gap-2">
           {localCategory && (
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[#D4AF37] bg-opacity-20 text-[#111111]">
               Kategori: {localCategory}
             </span>
           )}
           {(localMinPrice || localMaxPrice) && (
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[#D4AF37] bg-opacity-20 text-[#111111]">
               Fiyat: {localMinPrice || '∞'} - {localMaxPrice || '∞'} TL
             </span>
           )}
           {localSortDesc && (
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[#D4AF37] bg-opacity-20 text-[#111111]">
               Sıralama: {localSortBy} {localSortDesc ? '↓' : '↑'}
             </span>
           )}
